@@ -2,6 +2,8 @@
 itemGroup.Botania=Botania
 generator.botania-skyblock=Garden of Glass
 generator.botania-skyblock.info=Not recommended for botania newcomers
+generator.botania-sb-one=GoG-One Block
+generator.botania-sb-one.info=Not playable with Botania alone...
 
 # Something that is not localized, translators, do NOT change this line.
 botaniamisc.noloc=botaniamisc.noloc

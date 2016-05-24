@@ -1,8 +1,8 @@
 [
 {
   "modid": "Botania",
-  "name": "Botania",
-  "description": "Botania is a mod that adds nature magic to Minecraft.",
+  "name": "Botania (Unofficial SkyFactory Edition)",
+  "description": "Botania is a mod that adds nature magic to Minecraft.  This unofficial fork adds a grass block island world-type to Garden of Glass that isn't a feature included in Default Botania.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "logoFile": "assets/botania/textures/logo.png",

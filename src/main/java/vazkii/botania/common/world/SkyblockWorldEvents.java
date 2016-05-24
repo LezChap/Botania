@@ -12,6 +12,8 @@ package vazkii.botania.common.world;
 
 import java.awt.Color;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -21,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -34,6 +37,7 @@ import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.TileManaFlame;
 import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.item.equipment.tool.ToolCommons;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -138,7 +142,8 @@ public final class SkyblockWorldEvents {
 				EntityPlayerMP pmp = (EntityPlayerMP) player;
 				pmp.setPositionAndUpdate(x + 0.5, y + 1.6, z + 0.5);
 				pmp.setSpawnChunk(new ChunkCoordinates(x, y, z), true);
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.lexicon));
+				if(!player.inventory.hasItemStack(new ItemStack(ModItems.lexicon)))
+					player.inventory.addItemStackToInventory(new ItemStack(ModItems.lexicon));
 			}
 
 			if(fabricated) {
@@ -160,31 +165,46 @@ public final class SkyblockWorldEvents {
 	}
 
 	public static void createSkyblock(World world, int x, int y, int z) {
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 4; j++)
-				for(int k = 0; k < 3; k++)
-					world.setBlock(x - 1 + i, y - 1 - j, z - 1 + k, j == 0 ? Blocks.grass : Blocks.dirt);
-		world.setBlock(x - 1, y - 2, z, Blocks.flowing_water);
-		world.setBlock(x + 1, y + 2, z + 1, ModBlocks.manaFlame);
-		((TileManaFlame) world.getTileEntity(x + 1, y + 2, z + 1)).setColor(new Color(70 + world.rand.nextInt(185), 70 + world.rand.nextInt(185), 70 + world.rand.nextInt(185)).getRGB());
-
-		int[][] rootPositions = new int[][] {
-				{ -1, -3, -1 },
-				{ -2, -4, -1 },
-				{ -2, -4, -2 },
-				{ +1, -4, -1 },
-				{ +1, -5, -1 },
-				{ +2, -5, -1 },
-				{ +2, -6, +0 },
-				{ +0, -4, +2 },
-				{ +0, -5, +2 },
-				{ +0, -5, +3 },
-				{ +0, -6, +3 },
-		};
-		for(int[] root : rootPositions)
-			world.setBlock(x + root[0], y + root[1], z + root[2], ModBlocks.root);
-
-		world.setBlock(x, y - 4, z, Blocks.bedrock);
+		FMLLog.log(Level.INFO, "Botania creating Skyblock Island at " + x + ", " + y + ", " + z); 
+		if(WorldTypeSkyblockSingle.isWorldSingleBlock(world)) {
+			//Some mods generate blocks at spawn.  This for-block removes them.
+			for(int i = 0; i < 6; i++)
+				for(int j = 0; j < 7; j++)
+					for(int k = 0; k < 6; k++) {
+						world.setBlock(x - 3 + i,  y + j,  z - 3 + k, Blocks.air);
+					}
+			if(world.isAirBlock(x, y - 1, z)) {
+				world.setBlock(x, y - 1, z, Blocks.grass);
+				world.setBlock(x, y, z, Blocks.standing_sign, 6 , 3);
+				((TileEntitySign) world.getTileEntity(x, y, z)).signText[0] = "You get it yet?";
+			}
+		} else {
+			for(int i = 0; i < 3; i++)
+				for(int j = 0; j < 4; j++)
+					for(int k = 0; k < 3; k++)
+						world.setBlock(x - 1 + i, y - 1 - j, z - 1 + k, j == 0 ? Blocks.grass : Blocks.dirt);
+			world.setBlock(x - 1, y - 2, z, Blocks.flowing_water);
+			world.setBlock(x + 1, y + 2, z + 1, ModBlocks.manaFlame);
+			((TileManaFlame) world.getTileEntity(x + 1, y + 2, z + 1)).setColor(new Color(70 + world.rand.nextInt(185), 70 + world.rand.nextInt(185), 70 + world.rand.nextInt(185)).getRGB());
+	
+			int[][] rootPositions = new int[][] {
+					{ -1, -3, -1 },
+					{ -2, -4, -1 },
+					{ -2, -4, -2 },
+					{ +1, -4, -1 },
+					{ +1, -5, -1 },
+					{ +2, -5, -1 },
+					{ +2, -6, +0 },
+					{ +0, -4, +2 },
+					{ +0, -5, +2 },
+					{ +0, -5, +3 },
+					{ +0, -6, +3 },
+			};
+			for(int[] root : rootPositions)
+				world.setBlock(x + root[0], y + root[1], z + root[2], ModBlocks.root);
+	
+			world.setBlock(x, y - 4, z, Blocks.bedrock);
+		}
 	}
 
 }

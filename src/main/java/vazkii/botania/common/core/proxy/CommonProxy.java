@@ -83,6 +83,7 @@ import vazkii.botania.common.lib.LibMisc;
 import vazkii.botania.common.network.GuiHandler;
 import vazkii.botania.common.world.SkyblockWorldEvents;
 import vazkii.botania.common.world.WorldTypeSkyblock;
+import vazkii.botania.common.world.WorldTypeSkyblockSingle;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -125,8 +126,10 @@ public class CommonProxy {
 
 		LexiconData.init();
 
-		if(Botania.gardenOfGlassLoaded)
+		if(Botania.gardenOfGlassLoaded) {
 			new WorldTypeSkyblock();
+			new WorldTypeSkyblockSingle();
+		}
 	}
 
 	public void init(FMLInitializationEvent event) {

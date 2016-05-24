@@ -16,18 +16,21 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderFlat;
 import net.minecraftforge.common.MinecraftForge;
 
-public class WorldTypeSkyblock extends WorldType {
+public class WorldTypeSkyblockSingle extends WorldTypeSkyblock {
 
-	public WorldTypeSkyblock() {
-		super("botania-skyblock");
-	}
-	
-	public WorldTypeSkyblock(String s) {
-		super(s);
+	public WorldTypeSkyblockSingle() {
+		super("botania-sb-one");
 	}
 
 	public static boolean isWorldSkyblock(World world) {
-		return world.getWorldInfo().getTerrainType() instanceof WorldTypeSkyblock;
+		return world.getWorldInfo().getTerrainType() instanceof WorldTypeSkyblockSingle;
+	}
+	
+	public static boolean isWorldSingleBlock(World world) {
+		if(world.getWorldInfo().getTerrainType() instanceof WorldTypeSkyblockSingle) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
